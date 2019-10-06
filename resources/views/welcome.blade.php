@@ -10,6 +10,16 @@
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
         <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/4.0.0/firebaseui.css"/>
 
+        <!-- The core Firebase JS SDK is always required and must be listed first -->
+        <script src="https://www.gstatic.com/firebasejs/7.1.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-auth.js"></script>
+        <!-- firebaseUI -->
+        <script src="https://cdn.firebase.com/libs/firebaseui/4.0.0/firebaseui.js"></script>
+
+        <script src="{{asset('js/app.js')}}">
+
+        </script>
+
         <!-- Styles -->
         <style>
             html, body {
@@ -95,18 +105,11 @@
             </div>
         </div>
     </body>
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.1.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-auth.js"></script>
-    <!-- firebaseUI -->
-    <script src="https://cdn.firebase.com/libs/firebaseui/4.0.0/firebaseui.js"></script>
-
-
 
     <script>
       // Your web app's Firebase configuration
       var firebaseConfig = {
-        apiKey: AIzaSyCfps_86jSQcyTGr_u7KL_JzM8H5K83T5E,
+        apiKey: "{{env('GOOGLE_API_KEY')}}",
         authDomain: "uts-eai.firebaseapp.com",
         databaseURL: "https://uts-eai.firebaseio.com",
         projectId: "uts-eai",
