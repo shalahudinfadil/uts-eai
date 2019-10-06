@@ -9,6 +9,11 @@ use Carbon\Carbon;
 
 class IEXController extends Controller
 {
+    public function welcomeENV()
+    {
+      $apikey = config('app.name');
+      return $apiKey;
+    }
     public function getSymbols()
     {
       $client = new Client(['base_uri' => 'https://api.iextrading.com/']);

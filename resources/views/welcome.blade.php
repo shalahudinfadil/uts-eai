@@ -106,7 +106,7 @@
     <script>
       // Your web app's Firebase configuration
       var firebaseConfig = {
-        apiKey: {{env('GOOGLE_API_KEY')}},
+        apiKey: AIzaSyCfps_86jSQcyTGr_u7KL_JzM8H5K83T5E,
         authDomain: "uts-eai.firebaseapp.com",
         databaseURL: "https://uts-eai.firebaseio.com",
         projectId: "uts-eai",
