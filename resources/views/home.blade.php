@@ -34,12 +34,16 @@
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     </head>
     <body onload="checkSignIn()">
-      <nav class="navbar navbar-dark bg-info">
+      <nav class="navbar navbar-dark bg-info sticky-top">
         <a class="navbar-brand" href="/home">
           <i class="fa fa-line-chart" aria-hidden="true"></i>
           IEX Trading
         </a>
+        </ul>
         <ul class="navbar nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#" data-toggle="modal" data-target="#about_modal">About</a>
+          </li>
           <li class="nav-item dropdown">
            <a class="nav-link dropdown-toggle" href="#" id="dropdownUser" style="color:white;" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
              Profile
@@ -65,13 +69,13 @@
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Time Series</h5>
-                <small>Last 20 Trading Days (including today)</small>
+                <small>Last 20 Trading Days (excluding today)</small>
                 <hr>
-                <div id="chart_div" style="width: 900px; height: 500px;"></div>
+                <div id="chart_div"></div>
               </div>
             </div>
           </div>
-          <div class="col-md-12 mt-4">
+          <div class="col-md-12 my-4">
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Effective Spread</h5>
@@ -116,6 +120,23 @@
         </div>
       </div>
 
+      <!-- Modal About -->
+      <div class="modal fade bd-example-modal-sm" id="about_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">About</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body text-center">
+              <p>Powered by IEXTrading API, RapidAPI.com, and Google Firebase<br>Shalahudin Fadilah Bhakti 1202160340</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </body>
 
     <script>
@@ -141,8 +162,21 @@
             // console.log("  Name: " + profile.displayName);
             // console.log("  Email: " + profile.email);
             // console.log("  Photo URL: " + profile.photoURL);
+            var providerIcon;
+            switch (profile.providerId) {
+              case "google.com" :
+                providerIcon = '<i class="fa fa-google" aria-hidden="true"></i> ';
+                break;
+              case "facebook.com" :
+                providerIcon = '<i class="fa fa-facebook-official" aria-hidden="true"></i> ';
+                break;
+              default:
+                providerIcon = '<i class="fa fa-github" aria-hidden="true"></i> ';
+                break;
+            }
+
             var username = (profile.displayName) ? profile.displayName : profile.email;
-            document.getElementById("dropdownUser").innerHTML= '<i class="fa fa-user" aria-hidden="true"></i> '+username+' ('+profile.providerId+')';
+            document.getElementById("dropdownUser").innerHTML= providerIcon+username;
           });
         } else {
           window.location = "/";
@@ -159,17 +193,23 @@
     }
 
       google.charts.load('current', {'packages':['corechart']});
-      //google.charts.setOnLoadCallback(drawVisualization);
 
-       function drawVisualization(datas) {
-         // Some raw data (not necessarily accurate)
+       function drawVisualization(title,datas) {
          var data = google.visualization.arrayToDataTable(datas, true);
 
        var options = {
+        title: title,
         legend:'none',
         candlestick: {
               fallingColor: { strokeWidth: 0, fill: '#c21807' }, // red
               risingColor: { strokeWidth: 0, fill: '#0f9d58' }   // green
+            },
+            width: '900px',
+            height: '600px',
+            chartArea: {
+              height: '60%',
+              bottom: '30%',
+              top: '10%',
             }
           };
 
@@ -209,9 +249,10 @@
       <!-- Select Stuff -->
       $("#selectCompany").on('change', function() {
         var data = $(this).val();
+        var title = $(this).find('option:selected').text();
         $("#loading_modal").modal('show');
         $.get('/time-series/'+data, function (resp) {
-          drawVisualization(resp);
+          drawVisualization(title,resp);
           $.get('/effective-spread/'+data, function(resp) {
             table.clear().draw();
             table.rows.add(resp).draw();
