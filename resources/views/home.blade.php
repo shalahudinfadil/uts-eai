@@ -152,6 +152,7 @@
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
 
     function checkSignIn() {
       firebase.auth().onAuthStateChanged(function(user) {
